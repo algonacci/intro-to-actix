@@ -31,7 +31,7 @@ async fn main() -> std::io::Result<()> {
     let port = std::env::var("PORT").unwrap_or_else(|_| "8080".to_string());
     let server_address = format!("0.0.0.0:{}", port);
 
-    HttpServer::new(|| App::new().route("/", web::get().to(hello_world)))
+    HttpServer::new(|| App::new().service(hello_world))
         .bind(&server_address)?
         .run()
         .await
