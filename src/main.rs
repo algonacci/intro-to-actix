@@ -27,8 +27,12 @@ async fn hello_world() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(hello_world))
-        .bind(("127.0.0.1", 8080))?
+    // Retrieve the port from the environment variable or use a default
+    let port = std::env::var("PORT").unwrap_or_else(|_| "8080".to_string());
+    let server_address = format!("0.0.0.0:{}", port);
+
+    HttpServer::new(|| App::new().route("/", web::get().to(hello_world)))
+        .bind(&server_address)?
         .run()
         .await
 }
