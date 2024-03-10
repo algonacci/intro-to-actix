@@ -9,7 +9,8 @@ RUN cargo install --path .
 
 FROM gcr.io/distroless/cc-debian11
 
-ARG ARCH=aarch64
+ARG ARCH=amd64 
+
 
 COPY --from=build /usr/lib/${ARCH}-linux-gnu/libpq.so* /usr/lib/${ARCH}-linux-gnu/
 COPY --from=build /usr/lib/${ARCH}-linux-gnu/libgssapi_krb5.so* /usr/lib/${ARCH}-linux-gnu/
