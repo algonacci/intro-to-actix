@@ -1,14 +1,8 @@
-FROM rust:slim-buster
-
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get -y install libpq-dev
-
+FROM rust:1 as build-env
 WORKDIR /app
 COPY . /app/
-
 RUN cargo build --release
 
-EXPOSE 8080
-
-ENTRYPOINT ["/bin/bash", "-c", "cargo run --release"]
+FROM gcr.io/distroless/cc-debian12
+COPY --from=build-env /app/target/release/intro-to-actix /
+CMD ["./intro-to-actix"]
